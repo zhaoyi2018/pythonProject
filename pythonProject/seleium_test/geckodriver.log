@@ -1,0 +1,131 @@
+1657787625384	geckodriver	INFO	Listening on 127.0.0.1:53214
+1657787625462	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilefkprZe"
+1657787627003	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilefkprZe/search.json.mozlz4", (void 0)))
+1657787629188	Marionette	INFO	Listening on port 44738
+1657787629302	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PartitioningExceptionListService.jsm, line 69: NS_ERROR_MALFORMED_URI: Component returned failure code: 0x804b000a (NS_ERROR_MALFORMED_URI) [nsIPartitioningExceptionListObserver.onExceptionListUpdate]
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1001))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.child4/pagestyle35 (resource://devtools/server/actors/page-style.js:1001:5)", "resource://devtools/shared/protocol/Front.js", 362))
+1657788072818	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1001))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.child4/pagestyle35 (resource://devtools/server/actors/page-style.js:1001:5)", "resource://devtools/shared/protocol/Front.js", 362))
+JavaScript error: resource://devtools/server/actors/resources/stylesheets.js, line 71: TypeError: styleSheet is null
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+console.error: (new TypeError("parent is null", "resource://devtools/client/inspector/shared/style-change-tracker.js", 67))
+TypeError: parent is null: canMutationImpactCurrentStyles@resource://devtools/client/inspector/shared/style-change-tracker.js:67:24
+onMutations@resource://devtools/client/inspector/shared/style-change-tracker.js:84:41
+_emit@resource://devtools/shared/event-emitter.js:226:34
+emit@resource://devtools/shared/event-emitter.js:172:18
+emit@resource://devtools/shared/event-emitter.js:324:18
+getMutations@resource://devtools/client/fronts/walker.js:311:10
+
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1001))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.child4/pagestyle35 (resource://devtools/server/actors/page-style.js:1001:5)", "resource://devtools/shared/protocol/Front.js", 362))
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+console.error: "Error while calling actor 'pagestyle's method 'getLayout'" "node is null"
+console.error: (new TypeError("node is null", "resource://devtools/server/actors/page-style.js", 1001))
+console.error: (new Error("Protocol error (TypeError): node is null from: server0.conn0.child4/pagestyle35 (resource://devtools/server/actors/page-style.js:1001:5)", "resource://devtools/shared/protocol/Front.js", 362))
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+JavaScript error: resource://devtools/client/fronts/node.js, line 416: TypeError: this.parentFront is null
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1657803592835	geckodriver	INFO	Listening on 127.0.0.1:40919
+1657803592904	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilehpDt3z"
+1657803594351	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilehpDt3z/search.json.mozlz4", (void 0)))
+1657803596427	Marionette	INFO	Listening on port 44883
+1657803596539	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1657803609963	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1657803610932	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1657803611842	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1657803612549	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'interactive'.
+1657803614905	Marionette	INFO	Stopped listening on port 44883
+JavaScript error: resource:///modules/Interactions.jsm, line 209: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1657803621102	geckodriver	INFO	Listening on 127.0.0.1:39626
+1657803622183	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilemjFVOV"
+1657803623558	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilemjFVOV/search.json.mozlz4", (void 0)))
+1657803625866	Marionette	INFO	Listening on port 40137
+1657803625921	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1657803670958	geckodriver	INFO	Listening on 127.0.0.1:60485
+1657803672050	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileyqeuUa"
+1657803673571	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileyqeuUa/search.json.mozlz4", (void 0)))
+1657803675600	Marionette	INFO	Listening on port 36879
+1657803675695	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PartitioningExceptionListService.jsm, line 69: NS_ERROR_MALFORMED_URI: Component returned failure code: 0x804b000a (NS_ERROR_MALFORMED_URI) [nsIPartitioningExceptionListObserver.onExceptionListUpdate]
+1657803888649	Marionette	INFO	Stopped listening on port 36879
+JavaScript error: resource:///modules/Interactions.jsm, line 209: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x6B0025,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1657803890840	geckodriver	INFO	Listening on 127.0.0.1:35273
+1657803891922	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofileFCeoJi"
+1657803893266	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofileFCeoJi/search.json.mozlz4", (void 0)))
+1657803895881	Marionette	INFO	Listening on port 38707
+1657803895954	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PartitioningExceptionListService.jsm, line 69: NS_ERROR_MALFORMED_URI: Component returned failure code: 0x804b000a (NS_ERROR_MALFORMED_URI) [nsIPartitioningExceptionListObserver.onExceptionListUpdate]
+JavaScript error: resource://gre/modules/PartitioningExceptionListService.jsm, line 69: NS_ERROR_MALFORMED_URI: Component returned failure code: 0x804b000a (NS_ERROR_MALFORMED_URI) [nsIPartitioningExceptionListObserver.onExceptionListUpdate]
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: isMobileUA is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 59: ReferenceError: aqi18n is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoverCity is not defined
+JavaScript error: https://aqicn.org/city/china/fuzhou/xuefangzhan/cn, line 1: ReferenceError: onMouseoutCity is not defined
+1657803974648	Marionette	INFO	Stopped listening on port 38707
+JavaScript error: resource:///modules/Interactions.jsm, line 209: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1657803975935	Marionette	INFO	Stopped listening on port 40137
+JavaScript error: resource:///modules/Interactions.jsm, line 209: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1657803980127	geckodriver	INFO	Listening on 127.0.0.1:56037
+1657803981221	mozrunner::runner	INFO	Running command: "/bin/firefox" "--marionette" "-no-remote" "-profile" "/tmp/rust_mozprofilekaqnjP"
+1657803982757	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofilekaqnjP/search.json.mozlz4", (void 0)))
+1657803984892	Marionette	INFO	Listening on port 41516
+1657803984951	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/modules/PartitioningExceptionListService.jsm, line 69: NS_ERROR_MALFORMED_URI: Component returned failure code: 0x804b000a (NS_ERROR_MALFORMED_URI) [nsIPartitioningExceptionListObserver.onExceptionListUpdate]
+1657804189836	Marionette	WARN	Ignoring event 'pageshow' because document has an invalid readyState of 'uninitialized'.
+1657809082911	Marionette	INFO	Stopped listening on port 41516
+JavaScript error: resource:///modules/Interactions.jsm, line 209: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIUserIdleService.removeIdleObserver]
+JavaScript error: chrome://remote/content/marionette/cert.js, line 55: NS_ERROR_NOT_AVAILABLE: Component returned failure code: 0x80040111 (NS_ERROR_NOT_AVAILABLE) [nsICertOverrideService.setDisableAllSecurityChecksAndLetAttackersInterceptMyData]
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
