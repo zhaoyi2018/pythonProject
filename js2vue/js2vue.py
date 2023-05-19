@@ -132,7 +132,13 @@ def split_inner_from_content(content):
     return res
 
 
-def get_attr_dict(attr_str):
+def get_attr_dict(attr_str, inner_elements):
+    """
+
+    :param attr_str: 字符串
+    :param inner_elements: 一个列表，包含子元素
+    :return:
+    """
     if attr_str is None or attr_str.strip() == "":
         return ""
     attr_dict = {}
@@ -143,14 +149,18 @@ def get_attr_dict(attr_str):
         # 先判断有无单引号或多引号
         if attr_str[0] in ["'", '"']:
             end_index = match_content_to_index(attr_str, 0)
-            attr_key = attr_str[1:end_index+1].strip(" \"\'")
-            attr_str = attr_str[end_index+2:].strip(" ,:")
+            attr_key = attr_str[1:end_index + 1].strip(" \"\'")
+            attr_str = attr_str[end_index + 2:].strip(" ,:")
         else:
             attr_key = attr_str[:colon_index].strip(" \"\'")
             attr_str = attr_str[colon_index + 1:].strip(" ,:")
         attr_value_start_index = 0
         # 如果“:”后，非单引号或双引号
-        if attr_str[attr_value_start_index] not in ["'", "\"", "[", "{"]:
+        if attr_str[:16] == "function($event)":
+            attr_value_end_index = match_content_to_index(attr_str, 16)
+        elif attr_str[:6] == "_vm._u":
+            attr_value_end_index = match_content_to_index(attr_str, 6)
+        elif attr_str[attr_value_start_index] not in ["'", "\"", "[", "{"]:
             pattern = "[-\\+\\*/0-9_\\.a-zA-Z$\\(\\)\\\\'\"\\[\\]{}=]*"
             attr_value_end_index = re.search(pattern, attr_str).end()
         else:
@@ -158,7 +168,7 @@ def get_attr_dict(attr_str):
         attr_value = attr_str[attr_value_start_index: attr_value_end_index + 1].strip(" ,")
         # 判断attr_key为attrs的attr_value进行二次处理
         if attr_key == "attrs":
-            attr_dict.update(get_attr_dict(attr_value))
+            attr_dict.update(get_attr_dict(attr_value, inner_elements))
         elif attr_key == "staticStyle":
             temp_str = ""
             temp_dict = eval(attr_value)
@@ -170,8 +180,44 @@ def get_attr_dict(attr_str):
             attr_dict["style"] = "\"" + temp_str + "\""
         elif attr_key == "staticClass":
             attr_dict["class"] = attr_value
-        elif attr_key == "on":
-            on_func_dict = get_attr_dict(attr_value)
+        elif attr_key == "scopedSlots":
+            # 父级元素处理
+            attr_dict["slot-scope"] = '"scope"'
+            # 子级元素补充，记住我们只需要获取子集元素的字典就行
+            # 1. 首先先剥壳
+            temp_inner_elements = to_husk(attr_value, len("_vm._u([{key:\"default\",fn:function(scope){return ["))
+            # 2. 开始循环处理
+            while len(temp_inner_elements.strip(" ,")) > 0:
+                if temp_inner_elements[:2] == "_c":
+                    temp_end = match_content_to_index(temp_inner_elements, 2)
+                    temp_inner_dict = split_inner_from_content(temp_inner_elements[:temp_end+1])
+                    inner_elements.append(temp_inner_dict)
+                    if temp_end+1 < len(temp_inner_elements):
+                        temp_inner_elements = temp_inner_elements[temp_end+1:].strip(" ,")
+                    else:
+                        break
+                elif temp_inner_elements[0] == "(":
+                    # 子级元素条件预备
+                    end_condition_index = match_content_to_index(temp_inner_elements, 0)
+                    condition = temp_inner_elements[1: end_condition_index]
+                    # 子级元素, 切分三个部分
+                    temp_inner_elements = temp_inner_elements[end_condition_index + 2:]
+                    fisrt_content, second_content = match_content(temp_inner_elements)
+                    second_content, temp_inner_elements = match_content(second_content)
+                    # 子级元素内容生成后，存储的字典
+                    fisrt_content = split_inner_from_content(fisrt_content)
+                    fisrt_content['element_attr'] = "{v-if:" + "\"" + condition + "\"" + ", " + fisrt_content['element_attr'][1:]
+                    inner_elements.append(fisrt_content)
+                    second_content = split_inner_from_content(second_content)
+                    second_content['element_attr'] = "{v-else:'', " + second_content['element_attr'][1:]
+                    inner_elements.append(second_content)
+                elif temp_inner_elements[:11] == '_vm._v(" ")':
+                    temp_inner_elements = temp_inner_elements[11:].strip(" ,")
+                else:
+                    print("这是scopedSlots判断, 有问题:", temp_inner_elements)
+                    break
+        elif attr_key == "on" and attr_value[0] == "{":
+            on_func_dict = get_attr_dict(attr_value, inner_elements)
             for key, value in on_func_dict.items():
                 if value[:3] == "_vm":
                     attr_dict["@" + key] = "\"" + value[4:] + "\""
@@ -185,10 +231,11 @@ def get_attr_dict(attr_str):
             else:
                 attr_dict[":" + attr_key] = "\"" + attr_value + "\""
         elif attr_key == "model" and attr_value[0] == "{":
-            attr_dict["v-model"] = re.search("expression:\"([-a-zA-Z0-9_\\[\\]]*)\"", attr_value).group(1)
+            attr_dict["v-model"] = "\"" + re.search("expression:\"([-a-zA-Z0-9_\\[\\]\\.]*)\"", attr_value).group(
+                1) + "\""
         elif attr_key == "directives" and attr_value[0] == "[":
             temp_key = re.search("rawName:\"([-a-zA-Z0-9_]*)\"", attr_value).group(1)
-            temp_value = re.search("expression:\"([-a-zA-Z0-9_\\[\\]:']*)\"", attr_value).group(1)
+            temp_value = re.search("expression:\"([-a-zA-Z0-9_\\[\\]:'\\.]*)\"", attr_value).group(1)
             attr_dict[temp_key] = "\"" + temp_value + "\""
         else:
             attr_dict[attr_key] = attr_value
@@ -199,29 +246,86 @@ def get_attr_dict(attr_str):
     return attr_dict
 
 
-def list_to_vue(data_list):
-    vue_str = ""
-    # 先区分类型
-    while len(data_list) > 0:
-        data_dict = data_list.pop(0)
-        if data_dict["element_type"] == "_c":
-            element_str = "<"
-            # 获取元素类型
-            element_str += data_dict["element_tag"]
-            # 获取元素属性
-            attr_dict = get_attr_dict(data_dict.get("element_attr"))
-            for key, value in attr_dict.items():
-                element_str = element_str + " " + key + "=" + value
-            element_str += ">"
-            print(element_str)
-            # 迭代
-            data_list.extend(data_dict.get("element_inner_element", []))
+
+def to_husk(string, stop_index):
+    """
+    剥壳
+    :param string: 输入字符串
+    :param stop_index: 最终停止位置
+    :return:
+    """
+    if stop_index < 0 or string[stop_index - 1] not in ['"', "'", "[", "(", "{", "]", ")", "}"]:
+        print("输入参数有问题：", string, string[stop_index - 1], stop_index)
+        return string
+    start = 0
+    end = len(string)
+    while start < stop_index:
+        if string[start] not in ['"', "'", "[", "(", "{"]:
+            start += 1
         else:
-            # vue_str.append(data_dict["element_value"])
-            # vue_str.append("\n")
-            pass
+            temp_end = match_content_to_index(string, start)
+            if temp_end >= stop_index:
+                end = temp_end
+                start += 1
+            else:
+                start = temp_end + 1
+    return string[start: end]
+
+
+def match_content(string):
+    """
+    返回第一个匹配内容，和剩余内容
+    :param string:
+    :return:
+    """
+    if len(string) <= 0:
+        return -1
+    start = 0
+    while start < len(string):
+        if string[start] not in ['"', "'", "[", "(", "{"]:
+            start += 1
+        else:
+            end_index = match_content_to_index(string, start)
+            return string[:end_index+1].strip(" ,[]"), string[end_index+1:].strip(" ,:[]")
+
+def dict_to_vue(data_dict, nums=0):
+    element_str = ""
+    # 先区分类型
+    if data_dict["element_type"] == "_c":
+        one_element_str = "<"
+        # 获取元素类型
+        one_element_str += data_dict["element_tag"]
+        # 获取元素属性
+        if "element_inner_element" not in data_dict:
+            data_dict["element_inner_element"] = []
+        attr_dict = get_attr_dict(data_dict.get("element_attr"), data_dict.get("element_inner_element"))
+        # 字典字符串化
+        if type(attr_dict) == dict:
+            for key, value in attr_dict.items():
+                one_element_str = one_element_str + " " + key + "=" + value
+        one_element_str += ">"
+        # 迭代
+        for inner_dict in data_dict.get("element_inner_element", []):
+            inner_content = dict_to_vue(inner_dict, nums + 1)
+            if inner_content != "":
+                one_element_str += "\n" + ("\t" * (nums + 1)) + inner_content + "\n" + ("\t" * nums)
+        one_element_str += "</" + data_dict["element_tag"] + ">"
+        one_element_str *= data_dict.get("element_nums", 1)
+        element_str = one_element_str
+    elif data_dict["element_type"] == "_vm._v":
+        if data_dict["element_value"].find("_vm._s") >= 0:
+            element_str += "{{ "
+            content = data_dict["element_value"].strip()[7:-1]
+            if content.find("_vm.") >= 0:
+                element_str += content.replace("_vm.", "")
+            else:
+                element_str += content.strip()
+            element_str += " }}"
+        else:
+            element_str += data_dict["element_value"].strip(" \"[]")
+    return element_str
 
 
 file_content = read_file_content("/data/home/zhaoyi/Documents/PycharmProjects/pythonProject/js2vue/js.txt")
-list_to_vue([split_inner_from_content(file_content)])
-test = '{ref:"form",attrs:{"size":"mini","model":_vm.form,"label-width":"0px"}}'
+print(dict_to_vue(split_inner_from_content(file_content)))
+# print(to_husk(file_content, len("([{key:\"default\",fn:function(scope){return [")))
