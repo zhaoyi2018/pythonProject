@@ -323,6 +323,8 @@ def dict_to_vue(data_dict, nums=0):
             element_str += " }}"
         else:
             element_str += data_dict["element_value"].strip(" \"[]")
+    else:
+        print("未处理元素：", data_dict)
     return element_str
 
 

@@ -26,4 +26,4 @@ def restyle_from_style(content):
 
 
 file_content = read_file_content("/data/home/zhaoyi/Documents/PycharmProjects/pythonProject/js2vue/style.txt")
-print("<style scoped lang=\"scss\">" + restyle_from_style(file_content) + "</style>")
+print("<style scoped lang=\"scss\">" + restyle_from_style(file_content) + "\n</style>")
