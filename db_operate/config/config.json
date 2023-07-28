@@ -1,0 +1,27 @@
+{
+  "mysql1":{
+            "host":"db.dm.bionta.com",
+            "port":3306,
+            "user":"dazhou",
+            "password":"43vqgSQywSRQB9",
+            "database":"dazhou",
+            "charset":"utf8"
+            },
+    "mysql":{
+            "host":"db.dm.bionta.com",
+            "port":3306,
+            "user":"fengqing",
+            "password":"vUwAa2RPCYPJb6",
+            "database":"fengqing_leaderwarehouse",
+            "charset":"utf8"
+            },
+  "hive": {
+          "host":"nn0.dm.bionta.com",
+          "port":21050,
+          "user":"sadan",
+          "password":"",
+          "database":"sadan",
+          "auth_mechanism":"NOSASL"
+          },
+  "data_from_config": 1
+}
