@@ -22,11 +22,11 @@ logger = Logger(__name__)
 
 
 class HiveHelper(object):
-    def __init__(self, file_path=None):
+    def __init__(self, file_path=None, section="hive-sadan3"):
         if file_path is None:
-            self.db_config = get_config(file=get_global_config_path(),section='hive')
+            self.db_config = get_config(file=get_global_config_path(),section=section)
         else:
-            self.db_config = get_config(file=file_path, section='hive')
+            self.db_config = get_config(file=file_path, section=section)
         self.init()
 
     def init(self):

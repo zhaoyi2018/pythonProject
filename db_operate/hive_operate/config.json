@@ -1,0 +1,7 @@
+{
+  "hive_type_to_mysql": {
+    "string": "text",
+    "int": "int",
+    "double": "double"
+  }
+}

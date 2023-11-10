@@ -1,0 +1,23 @@
+{
+  "max_insert_rows": 10000,
+  "out_table": [
+    ["rlt_police_case_detail", {
+      "case_code": "string",
+      "case_detail": "string",
+      "case_orgid": "string",
+      "time": "string",
+      "rownames": "string"
+    }],
+    ["rlt_police_case_num_predict", {
+      "case_time": "string",
+      "case_type": "string",
+      "pre_value": "int",
+      "pre_value_high": "int",
+      "pre_value_low": "int",
+      "ratio": "double",
+      "true_value": "int",
+      "rownames": "string"
+    }]
+  ]
+}
+

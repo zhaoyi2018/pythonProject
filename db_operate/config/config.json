@@ -15,12 +15,28 @@
             "database":"fengqing_leaderwarehouse",
             "charset":"utf8"
             },
-  "hive": {
+  "hive-sadan3": {
+          "host":"nn0.dm.bionta.com",
+          "port":21050,
+          "user":"sadan",
+          "password":"",
+          "database":"sadan3",
+          "auth_mechanism":"NOSASL"
+          },
+  "hive-sadan": {
           "host":"nn0.dm.bionta.com",
           "port":21050,
           "user":"sadan",
           "password":"",
           "database":"sadan",
+          "auth_mechanism":"NOSASL"
+          },
+  "hive-fengqing_leaderwarehouse": {
+          "host":"nn0.dm.bionta.com",
+          "port":21050,
+          "user":"sadan",
+          "password":"",
+          "database":"fengqing_leaderwarehouse",
           "auth_mechanism":"NOSASL"
           },
   "data_from_config": 1
