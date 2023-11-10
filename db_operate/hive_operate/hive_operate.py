@@ -11,6 +11,17 @@ CONFIG = get_config(file=os.path.join(os.path.dirname(__file__), 'config.json'))
 logger = Logger(__name__)
 
 
+def get_all_tables(db_helper):
+    """
+    获取数据库内所有表名
+    :param db_helper:
+    :return:
+    """
+    sql = f"SHOW TABLES;"
+    result = pd.DataFrame(db_helper.queryAll(sql), columns=['table_name'])
+    return result
+
+
 def describe_table(db_helper, table_name):
     """
     获取表结构
@@ -43,7 +54,7 @@ def get_create_table_sql(table_name, attr_dict):
     return sql
 
 
-def get_insert_sql(table_name, attr_dict, datas, max_nums=10000):
+def get_insert_sql(table_name, attr_dict, datas, max_nums=10000, need_type='str'):
     """
     获取插入语句
     :param table_name: 表名
@@ -72,7 +83,10 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000):
 
 
     # 2. 准备sql语句
-    result = ''
+    if need_type == 'str':
+        result = ''
+    else:
+        result = []
     sql = 'INSERT INTO `{}`({}) ' \
           'VALUES {};'
     temp_columns = attr_dict.keys()
@@ -95,19 +109,29 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000):
                 logger.info(f'origin_nums: {datas.shape[0]},have saved nums :{i}')
                 j = 0
                 sql_insert = sql.format(table_name, temp_attr, ', \n'.join(all_data))
-                result += sql_insert
+                if need_type == 'str':
+                    result += sql_insert
+                else:
+                    result.append(sql_insert)
                 all_data = list()
         if j > 0:
             sql_insert = sql.format(table_name, temp_attr, ', \n'.join(all_data))
-            result += sql_insert
+            if need_type == 'str':
+                result += sql_insert
+            else:
+                result.append(sql_insert)
             del all_data
-            logger.info('Save the data success')
+            logger.info('  prepare the data success')
     else:
-        logger.info("the data is empty!")
+        logger.info("  the data is empty!")
     return result
 
 
-if __name__ == '__main__':
+def demo1():
+    """
+    读取csv文件中的table表名
+    :return:
+    """
     logger.info("hive数据库操作")
     hive_helper = HiveHelper()
 
@@ -142,3 +166,47 @@ if __name__ == '__main__':
             f.write('\n\n')
 
     hive_helper.close()
+
+
+if __name__ == '__main__':
+    logger.info("hive数据库操作")
+    # hive_helper = HiveHelper()
+    out_hive_helper = HiveHelper(section="hive-sadan")
+    in_hive_helper = HiveHelper(section="hive-fengqing_leaderwarehouse")
+
+    out_all_tables = get_all_tables(out_hive_helper)
+    in_all_tables = get_all_tables(in_hive_helper)
+
+    # 筛选
+    out_all_tables = out_all_tables[out_all_tables["table_name"].apply(lambda x: x.startswith("rlt_"))]
+    # 获取重合表
+    common_elements = pd.Series(pd.np.intersect1d(out_all_tables["table_name"], in_all_tables["table_name"]))
+
+    result = pd.DataFrame(columns=['table_name', 'column_name', 'column_type', 'column_describe'])
+
+    # 获取表结构
+    for table_name in set(out_all_tables['table_name']):
+        table_struct = describe_table(out_hive_helper, table_name)
+        result = result.append(table_struct)
+
+    # 预览数据类型种类
+    column_types = set(result['column_type'])
+    print(column_types)
+
+    # 分组
+    grouped = result.groupby(by='table_name')
+    logger.info('共{}表, 需要处理, 开始:'.format(len(grouped)))
+    for index, (group_label, group_data) in enumerate(grouped):
+        logger.info('  第{}个,表名{}, 开始处理'.format(index+1, group_label))
+        attr_dict = group_data[['column_name', 'column_type']].set_index('column_name')['column_type'].to_dict()
+        create_sql = get_create_table_sql(group_label, attr_dict)
+        datas = out_hive_helper.pd_read_sql(f'SELECT * FROM {group_label};')
+        insert_sqls = get_insert_sql(group_label, attr_dict, datas, need_type='list')
+        in_hive_helper.createTable(create_sql)
+        logger.info('  第{}个,表名{}, 创建成功'.format(index + 1, group_label))
+        for insert_sql in insert_sqls:
+            in_hive_helper.insert(insert_sql)
+        logger.info('  第{}个,表名{}, 数据插入成功'.format(index + 1, group_label))
+
+    out_hive_helper.close()
+    in_hive_helper.close()
