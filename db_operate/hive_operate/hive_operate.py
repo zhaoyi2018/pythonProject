@@ -61,6 +61,7 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000, need_type='str'
     :param attr_dict: 字段字典
     :param datas: dataframe的数据
     :param max_nums: 最大插入行数
+    :param need_type: 返回sqls格式类型（字符串，列表）
     :return:
     """
     # 1. 修正数据格式
@@ -75,7 +76,7 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000, need_type='str'
         elif table_attr_type in ['int', 'bool', 'float', 'double'] and table_attr_type == df_attr_dtype:
             continue
         # 1.1.2 异则修正， 由df现有类型->表指定类型。正常来说，从数据库读出来的数据一般不会发生太大的变异
-        elif table_attr_type == 'int' and df_attr_dtype == 'float':
+        elif table_attr_type in ['int', 'bigint'] and df_attr_dtype == 'float':
             # 目前只见到因为np.nan将int转为float情况
             datas[attr_name] = datas[attr_name].apply(lambda x: pd.NA if math.isnan(x) else int(x))
         else:
@@ -174,18 +175,18 @@ if __name__ == '__main__':
     out_hive_helper = HiveHelper(section="hive-sadan")
     in_hive_helper = HiveHelper(section="hive-fengqing_leaderwarehouse")
 
-    out_all_tables = get_all_tables(out_hive_helper)
-    in_all_tables = get_all_tables(in_hive_helper)
-
-    # 筛选
-    out_all_tables = out_all_tables[out_all_tables["table_name"].apply(lambda x: x.startswith("rlt_"))]
-    # 获取重合表
-    common_elements = pd.Series(pd.np.intersect1d(out_all_tables["table_name"], in_all_tables["table_name"]))
+    # out_all_tables = get_all_tables(out_hive_helper)
+    # in_all_tables = get_all_tables(in_hive_helper)
+    #
+    # # 筛选
+    # out_all_tables = out_all_tables[out_all_tables["table_name"].apply(lambda x: x.startswith("rlt_"))]
+    # # 获取重合表
+    # common_elements = pd.Series(pd.np.intersect1d(out_all_tables["table_name"], in_all_tables["table_name"]))
 
     result = pd.DataFrame(columns=['table_name', 'column_name', 'column_type', 'column_describe'])
-
+    out_all_tables = ['base_org_bak']
     # 获取表结构
-    for table_name in set(out_all_tables['table_name']):
+    for table_name in set(out_all_tables):
         table_struct = describe_table(out_hive_helper, table_name)
         result = result.append(table_struct)
 

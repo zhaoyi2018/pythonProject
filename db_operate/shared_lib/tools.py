@@ -57,7 +57,10 @@ def fast_save_to_db(db_helper, table_name, table_attr, result, config, drop=True
         for i, row in result.iterrows():
             j += 1
             temp_data = ', '.join(
-                ["NULL" if check_dataframe_value_null(row[key], table_attr[key]) else format_dataframe_value(row[key], table_attr[key]) for key in
+                ["NULL" if check_dataframe_value_null(row[key], table_attr[key]) else format_dataframe_value(row[key],
+                                                                                                             table_attr[
+                                                                                                                 key])
+                 for key in
                  temp_columns])
             all_data.append(f"({temp_data})")
             # 若插入数据行数过多，则提前插入
@@ -89,10 +92,10 @@ def check_dataframe_value_null(value, dtype):
         return value is None
     elif dtype in ['float', 'double']:
         return value is None or math.isnan(value)
-    elif dtype in ['int', 'date']:
+    elif dtype in ['int', 'date', 'bigint']:
         return pd.isna(value)
     else:
-        logger.info("为设置NULL的数据类型:", dtype)
+        logger.info("未设置NULL的数据类型:", dtype)
         return True
 
 
@@ -104,8 +107,8 @@ def format_dataframe_value(value, dtype):
     :return:
     """
     if dtype == 'string':
-        return f"'{value}'"
-    elif dtype in ['float', 'double', 'int']:
+        return "'{}'".format(value.replace("'", "\\'"))
+    elif dtype in ['float', 'double', 'int', 'bigint']:
         return f"{value}"
     else:
         logger.info("未设置格式化的数据类型:", dtype)
