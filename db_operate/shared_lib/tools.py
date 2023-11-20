@@ -324,6 +324,9 @@ def backup_db_to_sql(db_helper, file_path, tables=None):
     column_types = set(result['column_type'])
     if not check_hive_adapt_types(column_types):
         return
+    #  sql文件清空
+    with open(file_path, 'w') as f:
+        f.truncate()
     #  生成sql文件
     grouped = result.groupby(by='table_name')
     error_tables = []
@@ -336,7 +339,7 @@ def backup_db_to_sql(db_helper, file_path, tables=None):
         if insert_sql is None:
             error_tables.append(group_label)
             continue
-        with open(file_path, 'w') as f:
+        with open(file_path, 'a') as f:
             f.write(create_sql)
             f.write('\n\n')
             f.write(insert_sql)
