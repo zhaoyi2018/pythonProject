@@ -1,4 +1,5 @@
 import math
+import os
 from datetime import datetime
 
 import numpy as np
@@ -286,7 +287,7 @@ def insert_tables_to_hive_db(from_db, to_db, tables):
     logger.info("结束转移")
 
 
-def backup_db_to_sql(db_helper, file_path, tables=None):
+def backup_hive_db_to_sql(db_helper, file_path, tables=None):
     """
     备份hive数据库到指定sql文件
     :param db_helper: 数据库连接工具类
@@ -298,7 +299,8 @@ def backup_db_to_sql(db_helper, file_path, tables=None):
     if db_helper is None or file_path is None:
         logger.error("传入参数为None")
         return
-    if not isinstance(db_helper, HiveHelper) or not isinstance(file_path, str):
+    if not isinstance(db_helper, HiveHelper) or not isinstance(file_path, str) or \
+            (tables is not None and not isinstance(tables, list)):
         logger.error("传入参数类型异常")
         return
     if not file_path.endswith('.sql') or not len(file_path) >= 4:
@@ -346,5 +348,60 @@ def backup_db_to_sql(db_helper, file_path, tables=None):
             f.write('\n\n')
 
     # 结束备份
-    logger.info("导出失败表:" + str(error_tables))
+    logger.info("未导出表,{}个:{}".format(len(error_tables), str(error_tables)))
     logger.info("结束备份")
+
+
+def execute_sql_file(db_helper, file_path):
+    """
+    执行sql文件
+    :param db_helper: 数据库连接
+    :param file_path: sql文件路径
+    :return:
+    """
+    # 检验参数
+    if db_helper is None or file_path is None:
+        logger.error("传入参数为None")
+        return
+    if not isinstance(db_helper, HiveHelper) or not isinstance(file_path, str):
+        logger.error("传入参数类型异常")
+        return
+    if not file_path.endswith('.sql') or not len(file_path) >= 4 or not os.path.exists(file_path):
+        logger.error("文件路径异常")
+        return
+    if db_helper.showDatabases() is None:
+        logger.error("数据库连接异常")
+        return
+
+    with open(file_path, 'r') as sql_file:
+        # 逐条读取（防止大容量文件）
+        index = 0
+        sql = ""
+        for line in sql_file:
+            if sql == "":
+                # 新sql语句
+                line = line.lstrip()
+                if line == "":
+                    continue
+            if line.rstrip().endswith(");"):
+                sql += line.rstrip()
+                print("第{}条:{}".format(index+1, sql[:20]))
+                if sql.upper().startswith("CREATE TABLE"):
+                    db_helper.createTable(sql)
+                else:
+                    db_helper.insert(sql)
+                sql = ""
+            else:
+                sql += line
+
+        # for index, sql in enumerate(sqls):
+        #     logger.info("sql语句共{}条, 当前执行第{}条:{}".format(nums, index+1, sql))
+        #     sql = sql.strip()
+        #     if sql == '':
+        #         continue
+        #     if index % 2 == 0:
+        #         logger.info("创建sql")
+        #         # db_helper.createTable(sql)
+        #     else:
+        #         logger.info("插入sql")
+        #         # db_helper.insert(sql)
