@@ -64,6 +64,15 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000, need_type='str'
     :param need_type: 返回sqls格式类型（字符串，列表）
     :return:
     """
+    if need_type == 'str':
+        result = ''
+    else:
+        result = []
+
+    if datas.empty:
+        logger.info("  the data is empty!")
+        return result
+
     # 1. 修正数据格式
     datas_dtype_dict = datas.dtypes.to_dict()
     # 1.1. 首先判断表和df的相同字段数据类型是否相同
@@ -84,47 +93,41 @@ def get_insert_sql(table_name, attr_dict, datas, max_nums=10000, need_type='str'
 
 
     # 2. 准备sql语句
-    if need_type == 'str':
-        result = ''
-    else:
-        result = []
     sql = 'INSERT INTO `{}`({}) ' \
           'VALUES {};'
     temp_columns = attr_dict.keys()
     temp_attr = ", ".join([f'`{key}`' for key in temp_columns])
 
     all_data = []
-    if not datas.empty:
-        # 简单处理datas内容
-        datas = datas.where(datas.notnull(), None)
-        # 开始插入
-        j = 0
-        for i, row in datas.iterrows():
-            j += 1
-            temp_data = ', '.join(
-                ["NULL" if check_dataframe_value_null(row[key], attr_dict[key]) else format_dataframe_value(row[key], attr_dict[key]) for key in
-                 temp_columns])
-            all_data.append(f"({temp_data})")
-            # 若插入数据行数过多，则提前插入
-            if j > max_nums:
-                logger.info(f'origin_nums: {datas.shape[0]},have saved nums :{i}')
-                j = 0
-                sql_insert = sql.format(table_name, temp_attr, ', \n'.join(all_data))
-                if need_type == 'str':
-                    result += sql_insert
-                else:
-                    result.append(sql_insert)
-                all_data = list()
-        if j > 0:
+
+    # 简单处理datas内容
+    datas = datas.where(datas.notnull(), None)
+    # 开始插入
+    j = 0
+    for i, row in datas.iterrows():
+        j += 1
+        temp_data = ', '.join(
+            ["NULL" if check_dataframe_value_null(row[key], attr_dict[key]) else format_dataframe_value(row[key], attr_dict[key]) for key in
+             temp_columns])
+        all_data.append(f"({temp_data})")
+        # 若插入数据行数过多，则提前插入
+        if j > max_nums:
+            logger.info(f'origin_nums: {datas.shape[0]},have saved nums :{i}')
+            j = 0
             sql_insert = sql.format(table_name, temp_attr, ', \n'.join(all_data))
             if need_type == 'str':
                 result += sql_insert
             else:
                 result.append(sql_insert)
-            del all_data
-            logger.info('  prepare the data success')
-    else:
-        logger.info("  the data is empty!")
+            all_data = list()
+    if j > 0:
+        sql_insert = sql.format(table_name, temp_attr, ', \n'.join(all_data))
+        if need_type == 'str':
+            result += sql_insert
+        else:
+            result.append(sql_insert)
+        del all_data
+        logger.info('  prepare the data success')
     return result
 
 
@@ -169,7 +172,11 @@ def demo1():
     hive_helper.close()
 
 
-if __name__ == '__main__':
+def demo2():
+    """
+    把一个数据库的表导入另一个数据库
+    :return:
+    """
     logger.info("hive数据库操作")
     # hive_helper = HiveHelper()
     out_hive_helper = HiveHelper(section="hive-sadan")
@@ -198,7 +205,7 @@ if __name__ == '__main__':
     grouped = result.groupby(by='table_name')
     logger.info('共{}表, 需要处理, 开始:'.format(len(grouped)))
     for index, (group_label, group_data) in enumerate(grouped):
-        logger.info('  第{}个,表名{}, 开始处理'.format(index+1, group_label))
+        logger.info('  第{}个,表名{}, 开始处理'.format(index + 1, group_label))
         attr_dict = group_data[['column_name', 'column_type']].set_index('column_name')['column_type'].to_dict()
         create_sql = get_create_table_sql(group_label, attr_dict)
         datas = out_hive_helper.pd_read_sql(f'SELECT * FROM {group_label};')
@@ -211,3 +218,52 @@ if __name__ == '__main__':
 
     out_hive_helper.close()
     in_hive_helper.close()
+
+
+if __name__ == '__main__':
+    logger.info("hive数据库操作")
+    hive_helper = HiveHelper(section="hive-fengqing_leaderwarehouse")
+
+    # 读取excel文件 face_clustering_result,
+    # all_tables = get_all_tables(hive_helper)
+    all_tables = pd.DataFrame({"table_name": ["face_clustering_result", "large_enterprises_taxes_jc_test", "ozrlt_city_management_parts_devices_run_state_num_statistics",
+                                              "ozrlt_population_association_analysis_elderly_facility_community", "ozrlt_population_preschool_struct_orgname_kg_children_num",
+                                              "ozrlt_transportation_cross_road_count_this_month", "ozrlt_transportation_cross_road_count_today",
+                                              "ozrlt_transportation_overall_analysis_abnormal_statistic", "ozrlt_transportation_overall_analysis_network",
+                                              "r_familyinfo_jc_v2", "rlt2_population_association_analysis_difficult_student", "rlt2_population_association_analysis_elderly_facility_community",
+                                              "rlt2_population_preschool_struct_orgname_kg_children_num", "rlt2_public_safe_letter_department_summary", "rlt2_public_safe_letter_increase_rank",
+                                              "rlt_business_environment_large_enterprises_space_distribution_table", "rlt_ccb_carbon_rank_guide", "rlt_city_management_petition_analysis",
+                                              "rlt_citymanagement_grid_event_big_type", "rlt_citymanagement_traffic_traffic_heat_change", "rlt_health_city_not_completed_this_month",
+                                              "rlt_health_city_today_event_num_gps", "rlt_police_crimer_age_v2", "rlt_population_association_analysis_difficult_student",
+                                              "rlt_population_association_analysis_elderly_facility_community", "rlt_population_association_analysis_school_child__dist", "rlt_population_brain_report",
+                                              "rlt_population_preschool_struct_orgname_kg_children_num", "rlt_temp_low_income_spatial_distribution", "rlt_today_area_accept_event_num"
+                                              ]})
+
+    result = pd.DataFrame(columns=['table_name', 'column_name', 'column_type', 'column_describe'])
+
+    # 获取表结构
+    tables_num = len(set(all_tables['table_name']))
+    for index, table_name in enumerate(set(all_tables['table_name'])):
+        logger.info("共有:{}表, 进行到第{}表:{}".format(tables_num, index+1, table_name))
+        table_struct = describe_table(hive_helper, table_name)
+        result = result.append(table_struct)
+
+    # 预览数据类型种类
+    column_types = set(result['column_type'])
+    print(column_types)
+
+    # 分组
+    grouped = result.groupby(by='table_name')
+    for group_label, group_data in grouped:
+        attr_dict = group_data[['column_name', 'column_type']].set_index('column_name')['column_type'].to_dict()
+        create_sql = get_create_table_sql(group_label, attr_dict)
+        datas = hive_helper.pd_read_sql(f'SELECT * FROM {group_label};')
+        insert_sql = get_insert_sql(group_label, attr_dict, datas)
+        with open('./data/fengqing-leaderhouse-v2.sql', 'a') as f:
+            f.write(create_sql)
+            f.write('\n\n')
+            f.write(insert_sql)
+            f.write('\n\n')
+
+    hive_helper.close()
+
