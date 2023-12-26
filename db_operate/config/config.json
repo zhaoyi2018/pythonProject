@@ -15,6 +15,14 @@
             "database":"fengqing_leaderwarehouse",
             "charset":"utf8"
             },
+  "mysql2":{
+            "host":"db.dm.bionta.com",
+            "port":3306,
+            "user":"bda",
+            "password":"vUwAa2RPCYPJb6",
+            "database":"big_data_analysis",
+            "charset":"utf8"
+            },
   "hive-sadan3": {
           "host":"nn0.dm.bionta.com",
           "port":21050,
