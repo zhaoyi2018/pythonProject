@@ -1,5 +1,6 @@
 import json
-import re
+
+from dataease.utils.utils import to_snake_name, to_capitalize_name
 
 top_content = """package io.dataease.plugins.common.base.domain;
 
@@ -277,21 +278,12 @@ with open('./config.json', 'r') as f:
     config_dict = json.load(f)
 
 
-def to_serpentine_naming(origin_name):
-    snake_str = re.sub(r'([A-Z])', r'_\1', origin_name)
-    return snake_str.lower().lstrip('_')
-
-
-def to_capitalize(origin_name):
-    return origin_name[0].upper() + origin_name[1:]
-
-
 def gen_example_class(data):
     res = top_content
     res += class_first_content.replace("ReplaceClass", data["className"])
     for fieldName, fieldType in data["fields"].items():
-        capi_name = to_capitalize(fieldName)
-        snake_name = to_serpentine_naming(fieldName)
+        capi_name = to_capitalize_name(fieldName)
+        snake_name = to_snake_name(fieldName)
         for method_string in common_method_list:
             res += method_content
             res += method_string.replace("fieldName", fieldName)\
