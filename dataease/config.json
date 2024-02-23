@@ -1,0 +1,10 @@
+{
+    "className": "ApiToken",
+    "fields": {
+        "id": "Integer",
+        "token": "String",
+        "expire": "Long",
+        "note": "String",
+        "createTime": "Long"
+    }
+}
