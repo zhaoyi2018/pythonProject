@@ -1,10 +1,75 @@
 {
-    "className": "ApiToken",
-    "fields": {
-        "id": "Integer",
-        "token": "String",
-        "expire": "Long",
-        "note": "String",
-        "createTime": "Long"
-    }
+    "apiTable": [
+        {
+            "className": "ApiAlarm",
+            "fields": {
+                "apiId": "String",
+                "alarmPlugin": "String",
+                "alarmPluginParam": "String"
+            }
+        },
+        {
+            "className": "ApiAuth",
+            "fields": {
+                "id": "Integer",
+                "tokenId": "Integer",
+                "groupId": "String"
+            }
+        },
+        {
+            "className": "ApiConfig",
+            "fields": {
+                "id": "String",
+                "name": "String",
+                "note": "String",
+                "path": "String",
+                "datasourceId": "String",
+                "params": "String",
+                "status": "Integer",
+                "previlege": "Integer",
+                "groupId": "String",
+                "groupPath": "String",
+                "cachePlugin": "String",
+                "cachePluginParams": "String",
+                "createTime": "String",
+                "updateTime": "String",
+                "contentType": "String",
+                "openTrans": "Integer",
+                "jsonParam": "String",
+                "alarmPlugin": "String",
+                "alarmPluginParam": "String"
+            }
+        },
+        {
+            "className": "ApiGroup",
+            "fields": {
+                "id": "String",
+                "pid": "String",
+                "subCount": "Integer",
+                "name": "String",
+                "code": "String"
+            }
+        },
+        {
+            "className": "ApiSql",
+            "fields": {
+                "id": "Integer",
+                "apiId": "String",
+                "sqlText": "String",
+                "transformPlugin": "String",
+                "transformPluginParams": "String"
+            }
+        },
+        {
+            "className": "ApiToken",
+            "fields": {
+                "id": "Integer",
+                "token": "String",
+                "expire": "Long",
+                "note": "String",
+                "createTime": "Long"
+            }
+        }
+    ]
+
 }
