@@ -1,0 +1,30 @@
+{
+  "oozie": {
+    "重点区域感知":"/city_management/city_management/key_space/code_mclust.R",
+    "区域活跃度分析":"/city_management/city_management/activity_analyse/code.R",
+    "事件时空分析-周预测":"/city_management/city_management/spatio_temporal/code_by_week.R",
+    "事件时空分析-月预测":"/city_management/city_management/spatio_temporal/code_by_week.R",
+    "事件时空分析-年预测":"/city_management/city_management/spatio_temporal/code_by_year.R",
+    "低保家庭分析":"/people_live/people_live/low_income/main.R",
+    "部门运行态势":"/people_live/people_live/department_effective/main.R",
+    "特殊人群服务分析-残疾人分析":"/people_live/people_live/special_group_disability_people/disability_people.py",
+    "特殊人群服务分析-低收入人口分析":"/people_live/people_live/special_group_lowincome_people/low_income_people.py",
+    "实有人口分析":"/population/population/population_analyse/code.R",
+    "人口趋势分析-学龄前":"/population/population/space_distribution_preschool/preschool.py",
+    "人口趋势分析-老年人":"/population/population/space_distribution_elderly/elderly.py",
+    "流动人口分析":"/population/population/floating_population/floating_population.py",
+    "空间关联分析-人口城市事件":"/population/population/association_analyse_population_event/population_event.py",
+    "空间关联分析-人口商业场所":"/population/population/association_analyse_commercial_space/commercial_space.py",
+    "信访事件分析":"/public_safety/public_safety/letter_event_analysis/code.R",
+    "逆行事件分析":"/transportation/transportation/traffic_retrograde/traffic_retrograde.R",
+    "横穿马路事件分析":"/transportation/transportation/cross_the_road/cross_the_road.R",
+    "非机动车占用机动车道事件分析":"/transportation/transportation/lane_occupied/lane_occupied.R",
+    "人口综治域周报":"/brain_report/brain_report/population/population_brain_report.py",
+    "城市管理域周报":"/brain_report/brain_report/city_management/city_management_brain_report.py",
+    "民生主题域周报":"/brain_report/brain_report/people_live/people_live_brain_report.py",
+    "交通感知域周报":"/brain_report/brain_report/transportation/transportation_brain_report.py",
+    "商业环境域周报":"/brain_report/brain_report/business_environment/business_environment_brain_report.py",
+    "公共安全域周报":"/brain_report/brain_report/public_safety/public_safety_brain_report.py",
+    "应急管理域周报":"/brain_report/brain_report/emergency_management/emergency_management_brain_report.py"
+  }
+}

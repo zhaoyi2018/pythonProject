@@ -1,4 +1,4 @@
-import pandas
+import pandas as pd
 
 
 def get_first_num_index(data):
@@ -57,7 +57,7 @@ def sankey_simple(dataframe, key_dict, flag, inner=True):
         key_dict = key_dict.union(update_key_dict)
     else:
         key_dict = update_key_dict
-    names = pandas.DataFrame(data=list(key_dict), columns=['name'])
+    names = pd.DataFrame(data=list(key_dict), columns=['name'])
     print(str(names.to_json(orient='records', force_ascii=False)).replace("\"name\"", "name"))
 
     # 迭代
@@ -75,6 +75,35 @@ def a_union_of_multiple_sets_interacting(*args):
     return res
 
 
+def lng_lat_calc(data_list, value, operate='+'):
+    """
+    经纬度列表，批量处理
+    :param data_list: 原始列表
+    :param value: 操作数值
+    :param operate: 操作符号
+    :return: 返回字符串组成的列表
+    """
+    res = []
+    for item in data_list:
+        if operate == '+':
+            res.append(f"{float(item) + value:.6f}")
+        else:
+            res.append(f"{float(item) - value:.6f}")
+    return res
+
+def json_to_list(json_data):
+    """
+    json格式字符串转为key:[]组成的列表
+    :param json_data:
+    :return:
+    """
+    df = pd.read_json(json_data)
+    res = []
+    for key in df.columns:
+        res.append({key: [f"{i}" for i in df[key].to_list()]})
+    return res
+
+
 # data1 = "核桃12.5万吨；毛茶4.14万吨；粮17.69万吨；烟叶1万吨；甘蔗17.69万吨；生猪71.29万头；水产品1.67万吨"
 # split_dot = "；"
 # print(func1(data1, split_dot))
@@ -88,7 +117,53 @@ def a_union_of_multiple_sets_interacting(*args):
 # end_dot = "；"
 # print(func2(data2, start_dot, medium_dot, end_dot))
 
-print(python_split_to_java("rlt_public_safety_case_similarity_spatial_distribution"))
+# print(python_split_to_java("rlt_public_safety_case_similarity_spatial_distribution"))
 
 #
 # print(a_union_of_multiple_sets_interacting({1, 2, 3}, {2, 4}, {4, 1}, {3, 6}))
+
+# lng
+print("lng:", lng_lat_calc(["99.976322"],
+                   0.008377, '-'))
+# lat
+print("lat:", lng_lat_calc(["24.562339"],
+                   0.002273, '-'))
+
+# print(json_to_list("""[
+#            {
+#                "lng":"99.934577",
+#                "lat":"24.582618",
+#                "index_value":"30",
+#                "alt":"1"
+#            },
+#           {
+#                "lng":"99.913774",
+#                "lat":"24.58816",
+#                "index_value":"10",
+#                "alt":"1"
+#            },
+#            {
+#                "lng":"99.919933",
+#                "lat":"24.577749",
+#                "index_value":"50",
+#                "alt":"1"
+#            },
+#               {
+#                "lng":"99.946948",
+#                "lat":"24.570197",
+#                "index_value":"20",
+#                "alt":"1"
+#            },
+#            {
+#                "lng":"99.911157",
+#                "lat":"24.610372",
+#                "index_value":"40",
+#                "alt":"1"
+#            },
+#             {
+#                "lng":"99.927369",
+#                "lat":"24.571222",
+#                "index_value":"40",
+#                "alt":"1"
+#            }
+#        ]"""))

@@ -249,7 +249,7 @@ def get_attr_dict(attr_str, inner_elements):
             attr_dict["v-model"] = "\"" + re.search("expression:\"([-a-zA-Z0-9_\\[\\]\\.]*)\"", attr_value).group(
                 1) + "\""
         elif attr_key == "directives" and attr_value[0] == "[":
-            temp_key = re.search("rawName:\"([-a-zA-Z0-9_]*)\"", attr_value).group(1)
+            temp_key = re.search("rawName:\"([-a-zA-Z0-9_:]*)\"", attr_value).group(1)
             if "expression" not in attr_value:
                 print("特殊情况:", attr_value)
                 attr_dict[temp_key] = ""
